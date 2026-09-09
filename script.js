@@ -17,8 +17,7 @@ if (toggle && mobileNav) {
   });
 }
 
-// Grafo de conocimiento del hero: una sola secuencia de aparición,
-// no animación continua. Respeta prefers-reduced-motion.
+// Grafo de conocimiento del hero con la paleta de colores morado/azul del botón
 (function drawGraph() {
   const svg = document.getElementById('graph-svg');
   if (!svg) return;
@@ -27,8 +26,6 @@ if (toggle && mobileNav) {
   const edgesGroup = document.getElementById('graph-edges');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Posiciones fijas: un clúster denso (el archivo ya estructurado)
-  // conectando hacia nodos dispersos (fuentes aún por integrar).
   const nodes = [
     [210, 190], [180, 160], [235, 165], [255, 205], [200, 225],
     [165, 205], [225, 235], [150, 175], [270, 180], [190, 250],
@@ -42,23 +39,26 @@ if (toggle && mobileNav) {
     [3,13],[9,14],[6,15],[2,16],[7,17],
   ];
 
+  // Líneas con opacidad adaptada al tono claro
   edges.forEach(([a, b]) => {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('x1', nodes[a][0]);
     line.setAttribute('y1', nodes[a][1]);
     line.setAttribute('x2', nodes[b][0]);
     line.setAttribute('y2', nodes[b][1]);
-    line.setAttribute('stroke-opacity', '0.5');
+    line.setAttribute('stroke', '#6366f1');
+    line.setAttribute('stroke-opacity', '0.35');
     edgesGroup.appendChild(line);
   });
 
+  // Nodos centrales en morado (--accent-purple: #a855f7) y externos en azul (--accent-blue: #3b82f6)
   nodes.forEach(([x, y], i) => {
     const isCore = i < 10;
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', x);
     circle.setAttribute('cy', y);
     circle.setAttribute('r', isCore ? 6 : 4);
-    circle.setAttribute('fill', isCore ? '#A9782F' : '#1F4E4A');
+    circle.setAttribute('fill', isCore ? '#a855f7' : '#3b82f6');
     if (!reduceMotion) {
       circle.style.opacity = '0';
       circle.style.transition = `opacity .5s ease ${i * 0.05}s`;
